@@ -4,6 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Ubuntu 26.04 (Resolute) ships both PHP 8.5 and MySQL 8.4 natively.
 # No external PPAs or repos needed.
+# Username: admin
+# Password: Admin@1234
 
 # Prevent apt from trying to start services during install (container-safe)
 RUN echo '#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d
@@ -31,6 +33,7 @@ RUN apt-get update && apt-get install -y \
     # Utilities
     git \
     unzip \
+    cron \
     && rm -rf /var/lib/apt/lists/*
 
 # ── PHP tuning (both Apache and CLI, so installer + runtime both pass) ─────────

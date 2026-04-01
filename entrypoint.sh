@@ -35,6 +35,7 @@ echo "==> Waiting for MySQL..."
 for i in $(seq 1 30); do
     if mysqladmin ping --socket=${MYSQL_SOCK} --silent 2>/dev/null; then
         echo "==> MySQL is ready."
+        chmod 755 /var/run/mysqld
         break
     fi
     if [ "$i" -eq 30 ]; then
@@ -83,6 +84,13 @@ if [ ! -f /var/www/html/moodle/config.php ]; then
 else
     echo "==> Moodle already installed — skipping installer."
 fi
+
+# ── Start Moodle cron (runs every minute as www-data) ─────────────────────────
+echo "==> Starting cron..."
+echo "* * * * * www-data php /var/www/html/moodle/admin/cli/cron.php >> /var/log/moodle_cron.log 2>&1" \
+    > /etc/cron.d/moodle
+chmod 0644 /etc/cron.d/moodle
+cron
 
 # ── Start Apache in the foreground ────────────────────────────────────────────
 echo "==> Starting Apache..."
