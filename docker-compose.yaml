@@ -1,0 +1,18 @@
+services:
+  moodle:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: moodle_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - moodle_data:/var/moodledata
+      - moodle_html:/var/www/html/moodle
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  moodle_data:
+  moodle_html:
+  mysql_data:
